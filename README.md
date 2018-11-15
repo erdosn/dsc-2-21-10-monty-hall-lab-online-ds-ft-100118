@@ -31,6 +31,7 @@ What does your intuition say?  Is it in your best interest to switch the door ?
 
 ```python
 # Your solution here  
+# Switch
 ```
 
 ## Part B
@@ -39,6 +40,9 @@ Let's assume that you pick door number 1 and Monty opens door number 3.  The que
 
 ```python
 # Your solution here 
+# P(H|D1) = 0.50%
+# P(H|D2) = 100%
+# P(H|D2) = 0.00%
 ```
 
 ## Part C
@@ -47,7 +51,16 @@ Use your results from **Part B** and the Law of Total Probability to compute $P(
 
 ```python
 # Your solution here 
+# P(H)
+1/3 * 0.50 + 1/3 * 1 + 1/3 * 0
 ```
+
+
+
+
+    0.5
+
+
 
 ## Part D 
 Now, use Bayes' Rule to compute $P(D_i \mid H)$ for $i=1$ and $2$ (because these are the doors we care about). 
@@ -55,6 +68,9 @@ Now, use Bayes' Rule to compute $P(D_i \mid H)$ for $i=1$ and $2$ (because these
 
 ```python
 # Your solution here
+# P(D1|H) = 33%
+# P(D2|H) = 66%
+# P(D3|H) = 0%
 ```
 
 ## Part E
@@ -67,17 +83,17 @@ We are providing you with the structure of the code, fill it the formulas for ca
 ```python
 import numpy as np 
 def make_a_deal(switch=True):
-    doors = None
-    car = None
-    first_choice = None
-    montes_options = None
-    goat = None
-    final_choice = None
-    pass
+    doors = list(range(3))
+    car = np.random.choice(doors)
+    first_choice = np.random.choice(doors)
+    montes_options = list(set(doors)-set([car])-set([first_choice]))
+    goat = np.random.choice(montes_options)
+    final_choice = (set(doors)-set([goat])-set([first_choice])).pop() if switch else first_choice
+    return final_choice == car
 
 def monte_hall_sim(switch=True, num_trials=int(1e3)): 
-    winners = None
-    state = None  # "switching)" if switch else "not switching)"
+    winners = np.sum([make_a_deal(switch) for kk in range(num_trials)])
+    state = "switching)" if switch else "not switching)"
     print("P(winning by "+state+" = {:.4f}".format(winners/num_trials))
 ```
 
@@ -88,21 +104,27 @@ def monte_hall_sim(switch=True, num_trials=int(1e3)):
 
 
 ```python
-#monte_hall_sim(switch=True, num_trials=int(1e5))
+monte_hall_sim(switch=True, num_trials=int(1e5))
 
 
 
 # P(winning by switching) = 0.6675
 ```
 
+    P(winning by switching) = 0.6668
+
+
 
 ```python
-#monte_hall_sim(switch=False, num_trials=int(1e5))
+monte_hall_sim(switch=False, num_trials=int(1e5))
 
 
 
 # P(winning by not switching) = 0.3351
 ```
+
+    P(winning by not switching) = 0.3344
+
 
 
 ```python
